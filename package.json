@@ -6,9 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }  
+  },
   "author": "shalio88@163.com",
   "license": "ISC",
   "devDependencies": {
+    "husky": "^3.0.9",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9"
   }

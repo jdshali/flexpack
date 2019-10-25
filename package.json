@@ -14,6 +14,8 @@
   "author": "shalio88@163.com",
   "license": "ISC",
   "devDependencies": {
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
     "husky": "^2.7.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9"

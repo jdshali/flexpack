@@ -8,5 +8,18 @@ module.exports = {
    output: {
        path: path.resolve(__dirname, '../dist'), 
        filename: '[name].js'
+   },
+   module: {
+    rules: [
+        {   
+            test: /\.(js|vue)$/,
+            loader: 'eslint-loader',
+            enforce: 'pre',
+            include: [path.join(__dirname, 'src')],
+            options: {
+                fix: true
+            }
+        } 
+       ]
    }
 }

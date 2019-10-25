@@ -8,7 +8,7 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": ""
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "author": "shalio88@163.com",

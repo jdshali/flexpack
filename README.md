@@ -58,4 +58,12 @@
 
 ### 2、开发规范
 
-    
+    1)、eslint 
+
+    2)、参考https://github.com/AlloyTeam/eslint-config-alloy
+
+    3）、结合prettier使用，AlloyTeam规则建议
+
+    4) webpack配合elint-loader 使用 具体使用参考https://github.com/webpack-contrib/eslint-loader
+
+    结论：eslint + eslint-loader + prettier完美配合

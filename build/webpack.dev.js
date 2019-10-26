@@ -12,14 +12,19 @@ module.exports = {
    module: {
     rules: [
         {   
-            test: /\.(js|vue)$/,
-            loader: 'eslint-loader',
             enforce: 'pre',
-            include: [path.join(__dirname, 'src')],
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loader: 'eslint-loader',
             options: {
-                fix: true
-            }
-        } 
+                fix: true,
+            },
+        },
+        {
+            test: /\.js$/,
+            exclude: /(node_modules|bower_components)/,
+            use: 'babel-loader'
+        }, 
        ]
    }
 }

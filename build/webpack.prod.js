@@ -47,6 +47,18 @@ module.exports = {
                 "css-loader", // 将 CSS 转化成 CommonJS 模块
                 "sass-loader" // 将 Sass 编译成 CSS，默认使用 Node Sass
             ]
+        },
+        {
+            test: /\.(png|git|svg|jpg)$/, //同图片
+            use:[
+                {
+                    loader: 'file-loader'
+                }
+            ]
+        },
+        {
+            test: /\.(woff|woff2|eot|ttf|otf)$/,
+            use: 'file-loader'
         }
        ]
    }

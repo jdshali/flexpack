@@ -1,5 +1,7 @@
 const path = require('path');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");//css文件hash
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');//css文件压缩
+
 
 console.log('__dirname', __dirname)
 
@@ -77,6 +79,10 @@ module.exports = {
    plugins:[
     new MiniCssExtractPlugin({
         filename: '[name]_[contentHash:8].css'
-    }),
+    }),//css文件hash
+    new OptimizeCssAssetsPlugin({
+        assetNmaeRegExp: /\.css$/g,
+        cssProcessor: require('cssnano')
+    }),//css 文件压缩
    ]
 }

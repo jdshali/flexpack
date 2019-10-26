@@ -76,6 +76,8 @@
 
     2、webpack-dev-serve
 
+        常见的用法是热更新以及代理接口解决跨域问题
+
     3、css less sass
 
       css-loader用于加载.css文件，并且转换成commonjs对象
@@ -182,6 +184,60 @@
      }
     ```
 
+    5、文件hash
+
+       图片和字体
+
+       css:
+       ```
+       const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+       module.exports = {
+       plugins: [
+           new MiniCssExtractPlugin({
+           // Options similar to the same options in webpackOptions.output
+           // both options are optional
+           filename: "[name].css",
+           chunkFilename: "[id].css"
+           })
+       ],
+       module: {
+           rules: [
+           {
+               test: /\.css$/,
+               use: [
+               {
+                   loader: MiniCssExtractPlugin.loader,
+                   options: {
+                   // you can specify a publicPath here
+                   // by default it use publicPath in webpackOptions.output
+                   publicPath: '../'
+                   }
+               },
+               "css-loader"
+               ]
+           }
+           ]
+       }
+       }
+       ```
+ 
+    6、代码压缩
+
+    JS： webpack4内置了 uglifyjs-webpack-plugin
+    
+    css文件压缩
+
+    ```
+    //使用optimize-css-assets-webpack-plugin
+    //同时使用cssnano
+
+    plugins:[
+        new OptimizeCssAssetsPlugin({
+            assetNameRegExp: /\.css$/,
+            cssProcessor: require('cssnano')
+        })
+    ]
+    ```
 
 
 

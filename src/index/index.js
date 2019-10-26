@@ -1,6 +1,3 @@
-const test = "Hello world";
-
-const al = "f";
-
-al = 8;
-console.log(test);
+import "./index.less";
+import "./index.css";
+import "./index.scss";

@@ -67,3 +67,75 @@
     4) webpack配合elint-loader 使用 具体使用参考https://github.com/webpack-contrib/eslint-loader
 
     结论：eslint + eslint-loader + prettier完美配合
+
+## 二、基本功能
+
+    1、ES新特性
+       
+       bable-loader
+
+    2、webpack-dev-serve
+
+    3、css less sass
+
+      css-loader用于加载.css文件，并且转换成commonjs对象
+
+      style-loader将样式通过style标签插入到head中
+
+      ```
+      // 安装
+      npm i style-loader css-loader -D
+      ```
+
+      ```
+      //配置
+      module: {
+        rules:[
+            {
+                test: \/.css$\,
+                use:[
+                    'style-loader',
+                    'css-loader'
+                ]
+            }
+        ]
+    }
+
+    ```
+    less-loader
+    用于将less转为css
+
+    ```
+    //安装
+    cnpm i less less-loader -D
+    ```
+    ```
+    {
+       test: /\.less$/,
+       use:[
+           'style-loader',
+           'css-loader',
+           'less-loader'
+       ]
+    }
+    ```
+
+    sass-loader
+    ```
+    npm install sass  sass-loader node-sass  --save-dev
+    ```
+    ```
+    module: {
+        rules: [{
+            test: /\.scss$/,
+            use: [
+                "style-loader", // 将 JS 字符串生成为 style 节点
+                "css-loader", // 将 CSS 转化成 CommonJS 模块
+                "sass-loader" // 将 Sass 编译成 CSS，默认使用 Node Sass
+            ]
+        }]
+    }
+    ```
+
+
+       

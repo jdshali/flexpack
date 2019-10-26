@@ -1,13 +1,13 @@
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");//css文件hash
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');//css文件压缩
-
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 console.log('__dirname', __dirname)
 
 module.exports = {
     mode: 'production',
-   entry: path.join(__dirname, `../src/index/index.js`),
+   entry: path.join(__dirname, `../src/vue/index.js`),
    output: {
        path: path.resolve(__dirname, '../dist'), 
        filename: '[name].js'
@@ -28,6 +28,10 @@ module.exports = {
             exclude: /(node_modules|bower_components)/,
             use: 'babel-loader'
         }, 
+        {
+            test: /\.vue$/,
+            use: 'vue-loader'
+        },
         {
             test: /\.css$/,
             use:[
@@ -60,7 +64,8 @@ module.exports = {
                 {
                     loader: 'file-loader',
                     options:{
-                        name: '[name]_[hash:8].[ext]'
+                        name: '[name]_[hash:8].[ext]',
+                        outputPath: 'images'
                     }
                 }
             ]
@@ -70,7 +75,12 @@ module.exports = {
             use: [{
                 loader: 'file-loader',
                 options:{
-                    name: '[name]_[hash:8].[ext]'
+                    name: '[name]_[hash:8].[ext]',
+                    outputPath: 'font'
+                    // outputPath: function(url, resourcePath, context) {
+                    //     //console.info(url, resourcePath, context)
+                    //     return '/font/'
+                    // }
                 }
             }]
         }
@@ -84,5 +94,6 @@ module.exports = {
         assetNmaeRegExp: /\.css$/g,
         cssProcessor: require('cssnano')
     }),//css 文件压缩
+    new VueLoaderPlugin(), //vue 支持
    ]
 }

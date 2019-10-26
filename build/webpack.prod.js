@@ -1,9 +1,10 @@
 const path = require('path');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 console.log('__dirname', __dirname)
 
 module.exports = {
-   mode: "production",
+    mode: 'production',
    entry: path.join(__dirname, `../src/index/index.js`),
    output: {
        path: path.resolve(__dirname, '../dist'), 
@@ -28,14 +29,16 @@ module.exports = {
         {
             test: /\.css$/,
             use:[
-                'style-loader',
+                //'style-loader',
+                MiniCssExtractPlugin.loader,
                 'css-loader'
             ]
         },
         {
             test: /\.less$/,
             use:[
-                'style-loader',
+                //'style-loader',
+                MiniCssExtractPlugin.loader,
                 'css-loader',
                 'less-loader'
             ]
@@ -43,7 +46,8 @@ module.exports = {
         {
             test: /\.scss$/,
             use: [
-                "style-loader", // 将 JS 字符串生成为 style 节点
+                //"style-loader", // 将 JS 字符串生成为 style 节点
+                MiniCssExtractPlugin.loader,
                 "css-loader", // 将 CSS 转化成 CommonJS 模块
                 "sass-loader" // 将 Sass 编译成 CSS，默认使用 Node Sass
             ]
@@ -52,14 +56,27 @@ module.exports = {
             test: /\.(png|git|svg|jpg)$/, //同图片
             use:[
                 {
-                    loader: 'file-loader'
+                    loader: 'file-loader',
+                    options:{
+                        name: '[name]_[hash:8].[ext]'
+                    }
                 }
             ]
         },
         {
             test: /\.(woff|woff2|eot|ttf|otf)$/,
-            use: 'file-loader'
+            use: [{
+                loader: 'file-loader',
+                options:{
+                    name: '[name]_[hash:8].[ext]'
+                }
+            }]
         }
        ]
-   }
+   },
+   plugins:[
+    new MiniCssExtractPlugin({
+        filename: '[name]_[contentHash:8].css'
+    }),
+   ]
 }

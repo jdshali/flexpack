@@ -78,7 +78,7 @@
 
         常见的用法是热更新以及代理接口解决跨域问题
 
-    3、css less sass
+    3、css less sass postcss
 
       css-loader用于加载.css文件，并且转换成commonjs对象
 
@@ -137,6 +137,47 @@
             ]
         }]
     }
+    ```
+
+    postcss
+
+    ```javascript
+    cnpm i -D postcss-loader autoprefixer
+    {
+        loader: 'postcss-loader',
+        options: {
+            plugins: () => [
+                require('autoprefixer')({ overrideBrowserslist: ['iOS >= 7', 'Android >= 4.0'] })
+            ]
+        }
+    },
+    ```
+
+
+    px2rem:
+
+    ```javascript
+
+    //px2rem-loader
+    module.exports = {
+        module:{
+           rules: [
+               {
+                   test: /\.less$/,
+                   use: [
+                       'css-loader',
+                        {//注意要放在less-loader之前
+                            loader: 'px2rem-loader',
+                            options: {
+                                remUnit: 75,
+                                remPrecision: 8
+                            }
+                        } ,
+                        'less-loader'
+                   ]
+               }
+           ]
+        }
     ```
 
     4、字体
@@ -244,6 +285,28 @@
     基本用法：
 
     配置模板：默认支持lodash template; 如果使用其他的模板可以需要使用对应的loader;详细参考https://github.com/jantimon/html-webpack-plugin/blob/master/docs/template-option.md
+
+
+    8、多页面支持
+
+    多入口数组获取，约定好目录结构
+
+    9、自动清除构建目录
+
+    ```javascript
+    cnpm i - D clean-webpack-plugin
+
+    moudle.exports = {
+        plugins: [
+            new CleanWebpackPlugin()
+        ]
+    }
+    ```
+
+
+
+
+
 
     
 

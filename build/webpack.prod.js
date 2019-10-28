@@ -6,9 +6,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');//html
 const glob = require('glob');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
-console.log('__dirname', __dirname);
-
-
 const getMpaSet = () => { 
     const entry = {};
     const htmlWebpackPlugins = [];

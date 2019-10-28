@@ -4,6 +4,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');//
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');//html
 const glob = require('glob');
+const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin')
 
 const getMpaSet = () => { 
     const entry = {};
@@ -171,6 +172,15 @@ module.exports = {
         assetNmaeRegExp: /\.css$/g,
         cssProcessor: require('cssnano')
     }),//css 文件压缩
-    new VueLoaderPlugin(), //vue 支持
+    new VueLoaderPlugin(), //vue 支持,
+    new HtmlWebpackExternalsPlugin({//基础库抽离
+        externals: [
+            {
+                module: 'vue',
+                entry: 'https://cdn.jsdelivr.net/npm/vue/dist/vue.js',
+                global: 'Vue'
+            }
+        ]
+    })
    ].concat(htmlWebpackPlugins)
 }

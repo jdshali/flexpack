@@ -239,6 +239,13 @@
     ]
     ```
 
+    7、
+
+    基本用法：
+
+    配置模板：默认支持lodash template; 如果使用其他的模板可以需要使用对应的loader;详细参考https://github.com/jantimon/html-webpack-plugin/blob/master/docs/template-option.md
+
+    
 
 
        

@@ -2,6 +2,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");//css文件hash
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');//css文件压缩
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');//html
 
 console.log('__dirname', __dirname)
 
@@ -10,7 +11,7 @@ module.exports = {
    entry: path.join(__dirname, `../src/vue/index.js`),
    output: {
        path: path.resolve(__dirname, '../dist'), 
-       filename: '[name].js'
+       filename: '[name]_[chunkhash].js'
    },
    module: {
     rules: [
@@ -95,5 +96,20 @@ module.exports = {
         cssProcessor: require('cssnano')
     }),//css 文件压缩
     new VueLoaderPlugin(), //vue 支持
+    new HtmlWebpackPlugin({
+        template: path.join(__dirname, `../src/vue/index.html`),
+        //template: path.join(__dirname, `../src/vue/index.hbs`),
+        filename: `vue.html`,
+        //chunks: ['vue'],
+        inject: true,
+        // minify: {
+        //     html5: true,
+        //     collapseWhitespace: true,
+        //     preserveLineBreaks: false,
+        //     minifyCSS: true,
+        //     minifyJS: true,
+        //     removeComments: true
+        // }
+    })
    ]
 }

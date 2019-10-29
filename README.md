@@ -383,6 +383,19 @@
 ## 四、构建过程优化
 
     构建日志与错误
+    stats:构建统计信息
+    ```javascript
+    //production
+    module.exports = {
+        stats: 'normal'
+    }
+    // webpack-dev-server
+    devServer: {
+        compress: true,
+        port: 9000,
+        stats: '' //errors-only
+    }
+    ```
 
     体积分析
 

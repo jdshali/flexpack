@@ -20,5 +20,6 @@ module.exports = merge(baseConfig, {
                 }
             }
         }
-    }
+    },
+    stats: 'normal'// "none" | "errors-only" | "minimal" | "normal" | "detailed" | "verbose" | "errors-warnings"
 });

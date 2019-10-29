@@ -7,6 +7,9 @@ const glob = require('glob');
 const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin');//抽离公共包 通过cdn
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');//打印日志优化
+
+
 const getMpaSet = () => {
     const entry = {};
     const htmlWebpackPlugins = [];
@@ -187,6 +190,7 @@ module.exports = {
         //         }
         //     ]
         // }),
-        //new BundleAnalyzerPlugin()
+        //new BundleAnalyzerPlugin(), 
+        new FriendlyErrorsWebpackPlugin()
     ].concat(htmlWebpackPlugins)
 }

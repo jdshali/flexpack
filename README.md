@@ -330,14 +330,55 @@
         })
        ```
 
-
-       提取功能文件
+       2、常用的公共的方法，多入口时候，可以打包到公共的包
+       ```
+        optimization:{
+            splitChunks:{
+                minSize:0,
+                cacheGroups:{
+                    commons:{
+                        name: 'commons',
+                        chunks: 'all',
+                        minChunks: 2
+                    }
+                }
+            }
+        }
+       ```
 
        摇树优化
 
        scope hoisting 
+       
+       又名作用域提升，只需要在配置文件中添加一个新的插件，就可以让webpack打包的代码更小、运行的更快
+       
+       只适用于Es6的模块
 
-       代码分割与懒加载js
+       ```javascript
+        module.exports = {
+            plugins: [
+                new webpack.optimize.ModuleConcatenationPlugin()
+            ]
+        }
+
+       ```
+
+       代码分割
+       
+       懒加载js
+       
+       ```javascript
+        npm install @babel/plugin-syntax-dynamic-import --save-dev
+       ```
+
+       ```javascript
+        //.babelrc
+        {
+            "plugins": ["@babel/plugin-syntax-dynamic-import"]
+        }
+       ```
+
+
 
 ## 四、构建过程优化
 

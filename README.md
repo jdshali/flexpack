@@ -304,11 +304,68 @@
     ```
 
 
-### 三、优化
+## 三、业务优化
+
+   ### 1、概述
+
+       资源内联
+       
+       版本"raw-loader": "^0.5.1"
+       ```
+       //用法
+       <script>${ require('raw-loader!babel-loader!../../node_modules/lib-flexible/flexible.js') }</script>
+       ```
+       基础库分离
+       如何优化：
+       1、类似于vue vue-route等公共包可以放到CDN
+       ```
+        new HtmlWebpackExternalsPlugin({//基础库抽离
+            externals: [
+                {
+                    module: 'vue',
+                    entry: 'https://cdn.jsdelivr.net/npm/vue/dist/vue.js',
+                    global: 'Vue'
+                }
+            ]
+        })
+       ```
 
 
+       提取功能文件
 
+       摇树优化
 
+       scope hoisting 
+
+       代码分割与懒加载js
+
+## 四、构建过程优化
+
+    构建日志与错误
+
+    体积分析
+
+    多进程/多实例构建
+
+    分包
+
+    预编译
+
+    缓存
+
+    缩小构建目标
+
+    减少搜索范围
+
+    图片压缩
+
+    css优化
+
+    promise
+
+    单元测试
+
+## 五、SSR支持
 
 
     

@@ -161,6 +161,10 @@ module.exports = {
                     // }
                 }
             }]
+        },
+        {
+            test: /\.txt$/i,
+            use: 'raw-loader',
         }
        ]
    },
@@ -173,14 +177,26 @@ module.exports = {
         cssProcessor: require('cssnano')
     }),//css 文件压缩
     new VueLoaderPlugin(), //vue 支持,
-    new HtmlWebpackExternalsPlugin({//基础库抽离
-        externals: [
-            {
-                module: 'vue',
-                entry: 'https://cdn.jsdelivr.net/npm/vue/dist/vue.js',
-                global: 'Vue'
+    // new HtmlWebpackExternalsPlugin({//基础库抽离
+    //     externals: [
+    //         {
+    //             module: 'vue',
+    //             entry: 'https://cdn.jsdelivr.net/npm/vue/dist/vue.js',
+    //             global: 'Vue'
+    //         }
+    //     ]
+    // })
+   ].concat(htmlWebpackPlugins),
+   optimization:{
+    splitChunks:{
+        minSize:0,
+        cacheGroups:{
+            commons:{
+                name: 'commons',
+                chunks: 'all',
+                minChunks: 2
             }
-        ]
-    })
-   ].concat(htmlWebpackPlugins)
+        }
+    }
+    }
 }

@@ -2,8 +2,11 @@ const merge = require('webpack-merge');
 const baseConfig = require('./webpack.base');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack'); 
+const SpeedMeasureWebpackPlugin = require('speed-measure-webpack-plugin');
 
-module.exports = merge(baseConfig, {
+const smp = new SpeedMeasureWebpackPlugin();
+
+module.exports =  smp.wrap(merge(baseConfig, {
     mode: 'development',
     plugins: [
         new CleanWebpackPlugin(),//清除目录
@@ -22,4 +25,6 @@ module.exports = merge(baseConfig, {
         }
     },
     stats: 'normal'// "none" | "errors-only" | "minimal" | "normal" | "detailed" | "verbose" | "errors-warnings"
-});
+}));
+
+

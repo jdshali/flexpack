@@ -9,6 +9,9 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');//打印日志优化
 
+const HappyPack = require('happypack');//多进程
+
+
 
 const getMpaSet = () => {
     const entry = {};
@@ -77,7 +80,9 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /(node_modules|bower_components)/,
-                use: 'babel-loader'
+                //use: 'babel-loader'
+                use: ['happypack/loader?id=babel'],
+                exclude: /node_modules/
             },
             {
                 test: /\.vue$/,
@@ -103,7 +108,7 @@ module.exports = {
                             remPrecision: 8
                         }
                     },
-                    'less-loader',
+                    'happypack/loader?id=lessStyles',
                     {
                         loader: 'postcss-loader',
                         options: {
@@ -191,6 +196,16 @@ module.exports = {
         //     ]
         // }),
         //new BundleAnalyzerPlugin(), 
-        new FriendlyErrorsWebpackPlugin()
+        new FriendlyErrorsWebpackPlugin(),
+        new HappyPack({
+            id: 'babel',
+            // 需要使用的 loader，用法和 rules 中 Loader 配置一样
+            // 可以直接是字符串，也可以是对象形式
+            loaders: ['babel-loader']
+        }),
+        new HappyPack({
+            id: 'lessStyles',
+            loaders: ['less-loader']
+        })
     ].concat(htmlWebpackPlugins)
 }

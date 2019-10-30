@@ -239,6 +239,58 @@
     ]
     ```
 
+    7、支持vue
+
+    [参考](https://vue-loader.vuejs.org/zh/guide/#vue-cli)
+
+    ```!
+    注意：1、一起安装vue-loader和vue-template-compiler; 
+    ```
+    ```!
+    注意：2、Vue loader的配置和其它的loader不太一样。需要额外配置中添加vue loader插件；
+    ```
+
+    //webpack.config.js
+    //功能：将你定义过的其它规则复制并应用到.vue文件里相应语言的模块。
+    const VueLoaderPlugin = require('vue-loader/lib/plugin');
+
+        module.exports = {
+        module: {
+            rules:[
+                {
+                    test: /\.vue$/,
+                    use: 'vue-loader'
+                }
+            ]
+        },
+        plugins:[
+            new VueLoaderPlugin()
+        ]
+    }
+    ```
+
+    8、html生成
+
+    html-webpack-plugin
+    First:
+    ```
+    npm i -D html-webpack-plugin
+    ````
+    simple use like this:
+    ```
+    var HtmlWebpackPlugin = require('html-webpack-plugin');
+    var path = require('path');
+
+    module.exports = {
+    entry: 'index.js',
+    output: {
+        path: path.resolve(__dirname, './dist'),
+        filename: 'index_bundle.js'
+    },
+    plugins: [new HtmlWebpackPlugin()]
+    };
+    ```
+
 
 
        

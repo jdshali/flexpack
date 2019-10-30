@@ -1,7 +1,9 @@
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");//css文件hash
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');//css文件压缩
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');//vue
+var HtmlWebpackPlugin = require('html-webpack-plugin');//html生成
+
 
 console.log('__dirname', __dirname)
 
@@ -95,5 +97,6 @@ module.exports = {
         cssProcessor: require('cssnano')
     }),//css 文件压缩
     new VueLoaderPlugin(), //vue 支持
+    new HtmlWebpackPlugin(),//html生成
    ]
 }

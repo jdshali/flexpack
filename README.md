@@ -397,11 +397,56 @@
     }
     ```
 
+    更优雅的展示构建信息
+    ```javascript
+    npm install friendly-errors-webpack-plugin --save-dev
+
+    var FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+
+    plugins: [
+        new FriendlyErrorsWebpackPlugin(),
+    ],
+
+    ```
+
+    //速度分析
+
     体积分析
 
     多进程/多实例构建
 
+    happypack
+    
+    ```javascript
+    npm install --save-dev happypack
+    
+    ```
+
+    多进程压缩
+
+    ```javascript
+    const TerserPlugin = require('terser-webpack-plugin');
+
+    optimization: {
+        minimizer: [
+            new TerserPlugin({
+                parallel: 4
+            })
+        ]
+    }
+    ```
+
     分包
+    思路一：
+    将 vue、react-route 、vuex 基础包通过 cdn 引入，不打入 bundle 中
+    实现：使用 html-webpack-externalsplugin
+
+
+    方案二：预编译资源模块
+
+    思路：将 vue、vue-router、vuex  基础包和业务基础包打包成一个文件
+    方法：使用 DLLPlugin 进行分包，DllReferencePlugin 对 manifest.json 引用
+
 
     预编译
 

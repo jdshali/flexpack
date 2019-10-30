@@ -3,8 +3,10 @@ const baseConfig = require('./webpack.base');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack'); 
 const SpeedMeasureWebpackPlugin = require('speed-measure-webpack-plugin');
-
+const TerserPlugin = require('terser-webpack-plugin');
 const smp = new SpeedMeasureWebpackPlugin();
+
+
 
 module.exports =  smp.wrap(merge(baseConfig, {
     mode: 'development',
@@ -22,7 +24,12 @@ module.exports =  smp.wrap(merge(baseConfig, {
                     minChunks: 1
                 }
             }
-        }
+        },
+        minimizer: [
+            new TerserPlugin({
+                parallel: 4
+            })
+        ]
     },
     stats: 'normal'// "none" | "errors-only" | "minimal" | "normal" | "detailed" | "verbose" | "errors-warnings"
 }));

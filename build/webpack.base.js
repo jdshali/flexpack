@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");//css文件hash
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');//css文件压缩
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
@@ -10,6 +11,11 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');//打印日志优化
 
 const HappyPack = require('happypack');//多进程
+const os = require('os');
+
+const happyThreadPool = HappyPack.ThreadPool({
+    size: os.cpus().length || 3
+});
 
 
 
@@ -93,14 +99,14 @@ module.exports = {
                 use: [
                     //'style-loader',
                     MiniCssExtractPlugin.loader,
-                    'css-loader'
+                    'css-loader' 
                 ]
             },
             {
                 test: /\.less/,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    'css-loader',
+                    'happypack/loader?id=cssStyles',
                     {
                         loader: 'px2rem-loader',
                         options: {
@@ -147,29 +153,21 @@ module.exports = {
             },
             {
                 test: /\.(png|git|svg|jpg)$/, //同图片
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            name: '[name]_[hash:8].[ext]',
-                            outputPath: 'images'
-                        }
-                    }
-                ]
+                use: ['happypack/loader?id=ImgLoader']
             },
+            // {
+            //     test: /\.(woff|woff2|eot|ttf|otf)$/,
+            //     use: [{
+            //         loader: 'file-loader',
+            //         options: {
+            //             name: '[name]_[hash:8].[ext]',
+            //             outputPath: 'font'
+            //         }
+            //     }]
+            // },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/,
-                use: [{
-                    loader: 'file-loader',
-                    options: {
-                        name: '[name]_[hash:8].[ext]',
-                        outputPath: 'font'
-                        // outputPath: function(url, resourcePath, context) {
-                        //     //console.info(url, resourcePath, context)
-                        //     return '/font/'
-                        // }
-                    }
-                }]
+                use: ['happypack/loader?id=fontLoader']
             },
             {
                 test: /\.txt$/i,
@@ -201,11 +199,42 @@ module.exports = {
             id: 'babel',
             // 需要使用的 loader，用法和 rules 中 Loader 配置一样
             // 可以直接是字符串，也可以是对象形式
-            loaders: ['babel-loader']
+            loaders: ['babel-loader'],
+            threadPool: happyThreadPool
         }),
         new HappyPack({
             id: 'lessStyles',
-            loaders: ['less-loader']
-        })
+            loaders: ['less-loader'],
+            threadPool: happyThreadPool
+        }),
+        new HappyPack({
+            id: 'cssStyles',
+            loaders: ['css-loader'],
+            threadPool: happyThreadPool,
+        }),
+        new HappyPack({
+            id: 'ImgLoader',
+            loaders: [{
+                loader: require.resolve('file-loader'),
+                name: '[name]_[hash:8].[ext]',
+            //             outputPath: 'font'
+            }],
+            threadPool: happyThreadPool,
+        }),
+        new HappyPack({
+            id: 'fontLoader',
+            loaders: [{
+                loader: require.resolve('file-loader'),
+                options: {
+                    name: '[name]_[hash:8].[ext]',
+                    outputPath: 'font'
+                }
+            }],
+            threadPool: happyThreadPool,
+        }),
+        new webpack.DllReferencePlugin({
+            manifest: require('../build/library/library.json')
+        }),
+        
     ].concat(htmlWebpackPlugins)
 }

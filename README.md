@@ -469,6 +469,11 @@
     css优化
 
     promise
+    Polyfill.io 通过分析请求头信息中的 UserAgent 实现自动加载浏览器所需的 polyfills。
+    参考：https://c7sky.com/polyfill-io.html
+
+    使用：
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
 
 ## 五、单元测试
 

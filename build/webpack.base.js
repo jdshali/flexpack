@@ -11,12 +11,18 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');//打印日志优化
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
+const PurgecssPlugin = require('purgecss-webpack-plugin');
+
 const HappyPack = require('happypack');//多进程
 const os = require('os');
 
 const happyThreadPool = HappyPack.ThreadPool({
     size: os.cpus().length || 3
 });
+
+const PATHS = {
+    src: path.join(__dirname, '../src')
+};
 
 
 
@@ -236,7 +242,10 @@ module.exports = {
         new webpack.DllReferencePlugin({
             manifest: require('../build/library/library.json')
         }),
-        new HardSourceWebpackPlugin()
+        new HardSourceWebpackPlugin(),
+        new PurgecssPlugin({
+            paths: glob.sync(`${PATHS.src}/**/*`,  { nodir: true }),
+        })
         
     ].concat(htmlWebpackPlugins),
     resolve: {

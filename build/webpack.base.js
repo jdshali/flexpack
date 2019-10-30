@@ -241,7 +241,8 @@ module.exports = {
     ].concat(htmlWebpackPlugins),
     resolve: {
         alias: {
-            'vue': path.resolve(__dirname, '../node_modules/vue/dist/vue.runtime.common.js')
+            'vue': path.resolve(__dirname, '../node_modules/vue/dist/vue.runtime.common.js'),
+            'utils': path.resolve(__dirname, '../utils/')
         },
         extensions: ['.js'],
         //mainFields: ['main']

@@ -27,7 +27,8 @@ module.exports =  smp.wrap(merge(baseConfig, {
         },
         minimizer: [
             new TerserPlugin({
-                parallel: 4
+                parallel: true,
+                cache: true
             })
         ]
     },

@@ -9,6 +9,7 @@ const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin');//�
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');//打印日志优化
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 const HappyPack = require('happypack');//多进程
 const os = require('os');
@@ -194,12 +195,12 @@ module.exports = {
         //     ]
         // }),
         //new BundleAnalyzerPlugin(), 
-        new FriendlyErrorsWebpackPlugin(),
+        //new FriendlyErrorsWebpackPlugin(),
         new HappyPack({
             id: 'babel',
             // 需要使用的 loader，用法和 rules 中 Loader 配置一样
             // 可以直接是字符串，也可以是对象形式
-            loaders: ['babel-loader'],
+            loaders: ['babel-loader?cacheDirectory=true'],
             threadPool: happyThreadPool
         }),
         new HappyPack({
@@ -235,6 +236,14 @@ module.exports = {
         new webpack.DllReferencePlugin({
             manifest: require('../build/library/library.json')
         }),
+        new HardSourceWebpackPlugin()
         
-    ].concat(htmlWebpackPlugins)
+    ].concat(htmlWebpackPlugins),
+    resolve: {
+        alias: {
+            'vue': path.resolve(__dirname, '../node_modules/vue/dist/vue.runtime.common.js')
+        },
+        extensions: ['.js'],
+        //mainFields: ['main']
+    }
 }

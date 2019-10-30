@@ -447,14 +447,22 @@
     思路：将 vue、vue-router、vuex  基础包和业务基础包打包成一个文件
     方法：使用 DLLPlugin 进行分包，DllReferencePlugin 对 manifest.json 引用
 
-
-    预编译
-
     缓存
+    · babel-loader 开启缓存
+    · terser-webpack-plugin 开启缓存
+    · 使用 cache-loader 或者 hard-source-webpack-plugin
 
     缩小构建目标
 
+    尽可能的少构建模块
+    比如 babel-loader 不解析 node_modules
+
     减少搜索范围
+
+    优化resolve.modules配置
+    优化resolve.mainFields配置
+    优化resolve.extentions配置
+    合理使用alias
 
     图片压缩
 
@@ -462,9 +470,9 @@
 
     promise
 
-    单元测试
+## 五、单元测试
 
-## 五、SSR支持
+## 六、SSR支持
 
 
     

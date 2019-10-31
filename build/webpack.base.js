@@ -90,12 +90,23 @@ module.exports = {
                     fix: true,
                 },
             },
+            // {
+            //     test: /\.js$/,
+            //     exclude: /(node_modules|bower_components)/,
+            //     use: 'babel-loader',
+            //    // use: ['happypack/loader?id=babel'],
+            //     exclude: /node_modules/
+            // },
             {
-                test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
-                use: 'babel-loader',
-               // use: ['happypack/loader?id=babel'],
-                exclude: /node_modules/
+                test: /\.(js)$/,
+                exclude: /(node_modules)/,
+                use:{
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env'],
+                        plugins: ["@babel/plugin-syntax-dynamic-import"]
+                    }
+                }
             },
             {
                 test: /\.vue$/,

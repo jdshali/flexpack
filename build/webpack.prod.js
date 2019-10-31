@@ -10,6 +10,21 @@ const smp = new SpeedMeasureWebpackPlugin();
 
 module.exports =  smp.wrap(merge(baseConfig, {
     mode: "production",
+    modules:{
+        rules:[
+            {
+                test: /\.(js)$/,
+                exclude: /(node_modules)/,
+                use:{
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env'],
+                        plugins: ['@babel/transform-runtime']
+                    }
+                }
+            }
+        ]
+    },
     plugins: [
         new CleanWebpackPlugin(),//清除目录
         new webpack.optimize.ModuleConcatenationPlugin(),//Scope hoisting 作用域提升 
@@ -21,7 +36,7 @@ module.exports =  smp.wrap(merge(baseConfig, {
                 commons: {
                     name: 'commons',
                     chunks: 'all',
-                    minChunks: 1s
+                    minChunks: 1
                 }
             }
         },

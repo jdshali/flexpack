@@ -1,102 +1,38 @@
-const path = require('path');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");//css文件hash
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');//css文件压缩
-const VueLoaderPlugin = require('vue-loader/lib/plugin');//vue
-var HtmlWebpackPlugin = require('html-webpack-plugin');//html生成
+const merge = require('webpack-merge');
+const baseConfig = require('./webpack.base');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const webpack = require('webpack'); 
+const SpeedMeasureWebpackPlugin = require('speed-measure-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const smp = new SpeedMeasureWebpackPlugin();
 
 
-console.log('__dirname', __dirname)
 
-module.exports = {
-    mode: 'production',
-   entry: path.join(__dirname, `../src/vue/index.js`),
-   output: {
-       path: path.resolve(__dirname, '../dist'), 
-       filename: '[name].js'
-   },
-   module: {
-    rules: [
-        {   
-            enforce: 'pre',
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loader: 'eslint-loader',
-            options: {
-                fix: true,
-            },
-        },
-        {
-            test: /\.js$/,
-            exclude: /(node_modules|bower_components)/,
-            use: 'babel-loader'
-        }, 
-        {
-            test: /\.vue$/,
-            use: 'vue-loader'
-        },
-        {
-            test: /\.css$/,
-            use:[
-                //'style-loader',
-                MiniCssExtractPlugin.loader,
-                'css-loader'
-            ]
-        },
-        {
-            test: /\.less$/,
-            use:[
-                //'style-loader',
-                MiniCssExtractPlugin.loader,
-                'css-loader',
-                'less-loader'
-            ]
-        },
-        {
-            test: /\.scss$/,
-            use: [
-                //"style-loader", // 将 JS 字符串生成为 style 节点
-                MiniCssExtractPlugin.loader,
-                "css-loader", // 将 CSS 转化成 CommonJS 模块
-                "sass-loader" // 将 Sass 编译成 CSS，默认使用 Node Sass
-            ]
-        },
-        {
-            test: /\.(png|git|svg|jpg)$/, //同图片
-            use:[
-                {
-                    loader: 'file-loader',
-                    options:{
-                        name: '[name]_[hash:8].[ext]',
-                        outputPath: 'images'
-                    }
+module.exports =  smp.wrap(merge(baseConfig, {
+    mode: 'development',
+    plugins: [
+        new CleanWebpackPlugin(),//清除目录
+        new webpack.optimize.ModuleConcatenationPlugin(),//Scope hoisting 作用域提升 
+    ],
+    optimization: {
+        splitChunks: {
+            minSize: 0,
+            cacheGroups: {
+                commons: {
+                    name: 'commons',
+                    chunks: 'all',
+                    minChunks: 1s
                 }
-            ]
+            }
         },
-        {
-            test: /\.(woff|woff2|eot|ttf|otf)$/,
-            use: [{
-                loader: 'file-loader',
-                options:{
-                    name: '[name]_[hash:8].[ext]',
-                    outputPath: 'font'
-                    // outputPath: function(url, resourcePath, context) {
-                    //     //console.info(url, resourcePath, context)
-                    //     return '/font/'
-                    // }
-                }
-            }]
-        }
-       ]
-   },
-   plugins:[
-    new MiniCssExtractPlugin({
-        filename: '[name]_[contentHash:8].css'
-    }),//css文件hash
-    new OptimizeCssAssetsPlugin({
-        assetNmaeRegExp: /\.css$/g,
-        cssProcessor: require('cssnano')
-    }),//css 文件压缩
-    new VueLoaderPlugin(), //vue 支持
-    new HtmlWebpackPlugin(),//html生成
-   ]
-}
+        minimizer: [
+            new TerserPlugin({
+                parallel: true,
+                cache: true
+            })
+        ]
+    },
+    stats: 'normal'// "none" | "errors-only" | "minimal" | "normal" | "detailed" | "verbose" | "errors-warnings"
+}));
+
+

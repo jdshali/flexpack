@@ -78,7 +78,7 @@
 
         常见的用法是热更新以及代理接口解决跨域问题
 
-    3、css less sass
+    3、css less sass postcss
 
       css-loader用于加载.css文件，并且转换成commonjs对象
 
@@ -137,6 +137,47 @@
             ]
         }]
     }
+    ```
+
+    postcss
+
+    ```javascript
+    cnpm i -D postcss-loader autoprefixer
+    {
+        loader: 'postcss-loader',
+        options: {
+            plugins: () => [
+                require('autoprefixer')({ overrideBrowserslist: ['iOS >= 7', 'Android >= 4.0'] })
+            ]
+        }
+    },
+    ```
+
+
+    px2rem:
+
+    ```javascript
+
+    //px2rem-loader
+    module.exports = {
+        module:{
+           rules: [
+               {
+                   test: /\.less$/,
+                   use: [
+                       'css-loader',
+                        {//注意要放在less-loader之前
+                            loader: 'px2rem-loader',
+                            options: {
+                                remUnit: 75,
+                                remPrecision: 8
+                            }
+                        } ,
+                        'less-loader'
+                   ]
+               }
+           ]
+        }
     ```
 
     4、字体
@@ -291,6 +332,207 @@
     };
     ```
 
+    7、
+
+    基本用法：
+
+    配置模板：默认支持lodash template; 如果使用其他的模板可以需要使用对应的loader;详细参考https://github.com/jantimon/html-webpack-plugin/blob/master/docs/template-option.md
+
+
+    8、多页面支持
+
+    多入口数组获取，约定好目录结构
+
+    9、自动清除构建目录
+
+    ```javascript
+    cnpm i - D clean-webpack-plugin
+
+    moudle.exports = {
+        plugins: [
+            new CleanWebpackPlugin()
+        ]
+    }
+    ```
+
+
+## 三、业务优化
+
+   ### 1、概述
+
+       资源内联
+       
+       版本"raw-loader": "^0.5.1"
+       ```
+       //用法
+       <script>${ require('raw-loader!babel-loader!../../node_modules/lib-flexible/flexible.js') }</script>
+       ```
+       基础库分离
+       如何优化：
+       1、类似于vue vue-route等公共包可以放到CDN
+       ```
+        new HtmlWebpackExternalsPlugin({//基础库抽离
+            externals: [
+                {
+                    module: 'vue',
+                    entry: 'https://cdn.jsdelivr.net/npm/vue/dist/vue.js',
+                    global: 'Vue'
+                }
+            ]
+        })
+       ```
+
+       2、常用的公共的方法，多入口时候，可以打包到公共的包
+       ```
+        optimization:{
+            splitChunks:{
+                minSize:0,
+                cacheGroups:{
+                    commons:{
+                        name: 'commons',
+                        chunks: 'all',
+                        minChunks: 2
+                    }
+                }
+            }
+        }
+       ```
+
+       摇树优化
+
+       scope hoisting 
+       
+       又名作用域提升，只需要在配置文件中添加一个新的插件，就可以让webpack打包的代码更小、运行的更快
+       
+       只适用于Es6的模块
+
+       ```javascript
+        module.exports = {
+            plugins: [
+                new webpack.optimize.ModuleConcatenationPlugin()
+            ]
+        }
+
+       ```
+
+       代码分割
+       
+       懒加载js
+       
+       ```javascript
+        npm install @babel/plugin-syntax-dynamic-import --save-dev
+       ```
+
+       ```javascript
+        //.babelrc
+        {
+            "plugins": ["@babel/plugin-syntax-dynamic-import"]
+        }
+       ```
+
+
+
+## 四、构建过程优化
+
+    构建日志与错误
+    stats:构建统计信息
+    ```javascript
+    //production
+    module.exports = {
+        stats: 'normal'
+    }
+    // webpack-dev-server
+    devServer: {
+        compress: true,
+        port: 9000,
+        stats: '' //errors-only
+    }
+    ```
+
+    更优雅的展示构建信息
+    ```javascript
+    npm install friendly-errors-webpack-plugin --save-dev
+
+    var FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+
+    plugins: [
+        new FriendlyErrorsWebpackPlugin(),
+    ],
+
+    ```
+
+    //速度分析
+
+    体积分析
+
+    多进程/多实例构建
+
+    happypack
+    
+    ```javascript
+    npm install --save-dev happypack
+    
+    ```
+
+    多进程压缩
+
+    ```javascript
+    const TerserPlugin = require('terser-webpack-plugin');
+
+    optimization: {
+        minimizer: [
+            new TerserPlugin({
+                parallel: 4
+            })
+        ]
+    }
+    ```
+
+    分包
+    思路一：
+    将 vue、react-route 、vuex 基础包通过 cdn 引入，不打入 bundle 中
+    实现：使用 html-webpack-externalsplugin
+
+
+    方案二：预编译资源模块
+
+    思路：将 vue、vue-router、vuex  基础包和业务基础包打包成一个文件
+    方法：使用 DLLPlugin 进行分包，DllReferencePlugin 对 manifest.json 引用
+
+    缓存
+    · babel-loader 开启缓存
+    · terser-webpack-plugin 开启缓存
+    · 使用 cache-loader 或者 hard-source-webpack-plugin
+
+    缩小构建目标
+
+    尽可能的少构建模块
+    比如 babel-loader 不解析 node_modules
+
+    减少搜索范围
+
+    优化resolve.modules配置
+    优化resolve.mainFields配置
+    优化resolve.extentions配置
+    合理使用alias
+
+    图片压缩
+
+    css优化
+
+    promise
+    Polyfill.io 通过分析请求头信息中的 UserAgent 实现自动加载浏览器所需的 polyfills。
+    参考：https://c7sky.com/polyfill-io.html
+
+    使用：
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+
+## 五、单元测试
+
+## 六、SSR支持
+
+
+    
 
 
        

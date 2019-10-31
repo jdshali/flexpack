@@ -93,8 +93,8 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /(node_modules|bower_components)/,
-                //use: 'babel-loader'
-                use: ['happypack/loader?id=babel'],
+                use: 'babel-loader',
+               // use: ['happypack/loader?id=babel'],
                 exclude: /node_modules/
             },
             {
@@ -158,24 +158,34 @@ module.exports = {
 
                 ]
             },
+            // {
+            //     test: /\.(png|git|svg|jpg)$/, //同图片
+            //     use: ['happypack/loader?id=ImgLoader']
+            // },
             {
-                test: /\.(png|git|svg|jpg)$/, //同图片
-                use: ['happypack/loader?id=ImgLoader']
+                test: /\.(png|git|svg|jpg)$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name]_[hash:8].[ext]',
+                        outputPath: 'images'
+                    }
+                }]
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name]_[hash:8].[ext]',
+                        outputPath: 'font'
+                    }
+                }]
             },
             // {
             //     test: /\.(woff|woff2|eot|ttf|otf)$/,
-            //     use: [{
-            //         loader: 'file-loader',
-            //         options: {
-            //             name: '[name]_[hash:8].[ext]',
-            //             outputPath: 'font'
-            //         }
-            //     }]
+            //     use: ['happypack/loader?id=fontLoader']
             // },
-            {
-                test: /\.(woff|woff2|eot|ttf|otf)$/,
-                use: ['happypack/loader?id=fontLoader']
-            },
             {
                 test: /\.txt$/i,
                 use: 'raw-loader',
@@ -202,13 +212,13 @@ module.exports = {
         // }),
         //new BundleAnalyzerPlugin(), 
         //new FriendlyErrorsWebpackPlugin(),
-        new HappyPack({
-            id: 'babel',
-            // 需要使用的 loader，用法和 rules 中 Loader 配置一样
-            // 可以直接是字符串，也可以是对象形式
-            loaders: ['babel-loader?cacheDirectory=true'],
-            threadPool: happyThreadPool
-        }),
+        // new HappyPack({
+        //     id: 'babel',
+        //     // 需要使用的 loader，用法和 rules 中 Loader 配置一样
+        //     // 可以直接是字符串，也可以是对象形式
+        //     loaders: ['babel-loader?cacheDirectory=true'],
+        //     threadPool: happyThreadPool
+        // }),
         new HappyPack({
             id: 'lessStyles',
             loaders: ['less-loader'],
@@ -219,30 +229,30 @@ module.exports = {
             loaders: ['css-loader'],
             threadPool: happyThreadPool,
         }),
-        new HappyPack({
-            id: 'ImgLoader',
-            loaders: [{
-                loader: require.resolve('file-loader'),
-                name: '[name]_[hash:8].[ext]',
-            //             outputPath: 'font'
-            }],
-            threadPool: happyThreadPool,
-        }),
-        new HappyPack({
-            id: 'fontLoader',
-            loaders: [{
-                loader: require.resolve('file-loader'),
-                options: {
-                    name: '[name]_[hash:8].[ext]',
-                    outputPath: 'font'
-                }
-            }],
-            threadPool: happyThreadPool,
-        }),
+        // new HappyPack({
+        //     id: 'ImgLoader',
+        //     loaders: [{
+        //         loader: require.resolve('file-loader'),
+        //         name: '[name]_[hash:8].[ext]',
+        //     //             outputPath: 'font'
+        //     }],
+        //     threadPool: happyThreadPool,
+        // }),
+        // new HappyPack({
+        //     id: 'fontLoader',
+        //     loaders: [{
+        //         loader: require.resolve('file-loader'),
+        //         options: {
+        //             name: '[name]_[hash:8].[ext]',
+        //             outputPath: 'font'
+        //         }
+        //     }],
+        //     threadPool: happyThreadPool,
+        // }),
         new webpack.DllReferencePlugin({
             manifest: require('../build/library/library.json')
         }),
-        new HardSourceWebpackPlugin(),
+        //new HardSourceWebpackPlugin(),
         new PurgecssPlugin({
             paths: glob.sync(`${PATHS.src}/**/*`,  { nodir: true }),
         })

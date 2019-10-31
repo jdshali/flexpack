@@ -9,7 +9,7 @@ const smp = new SpeedMeasureWebpackPlugin();
 
 
 module.exports =  smp.wrap(merge(baseConfig, {
-    mode: 'development',
+    mode: "production",
     plugins: [
         new CleanWebpackPlugin(),//清除目录
         new webpack.optimize.ModuleConcatenationPlugin(),//Scope hoisting 作用域提升 

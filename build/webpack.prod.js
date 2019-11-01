@@ -10,43 +10,28 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports =  merge(baseConfig, { //smp.wrap(
     mode: "production",
-    // module:{
-    //     rules:[
-    //         {
-    //             test: /\.(js)$/,
-    //             exclude: /(node_modules)/,
-    //             use:{
-    //                 loader: 'babel-loader',
-    //                 options: {
-    //                     presets: ['@babel/preset-env'],
-    //                     plugins: ['@babel/transform-runtime']
-    //                 }
-    //             }
-    //         }
-    //     ]
-    // },
     plugins: [
         new CleanWebpackPlugin(),//清除目录
-        //new webpack.optimize.ModuleConcatenationPlugin(),//Scope hoisting 作用域提升 
+        new webpack.optimize.ModuleConcatenationPlugin(),//Scope hoisting 作用域提升 
     ],
-    // optimization: {
-    //     splitChunks: {
-    //         minSize: 0,
-    //         cacheGroups: {
-    //             commons: {
-    //                 name: 'commons',
-    //                 chunks: 'all',
-    //                 minChunks: 1
-    //             }
-    //         }
-    //     },
-    //     minimizer: [
-    //         new TerserPlugin({
-    //             parallel: true,
-    //             cache: true
-    //         })
-    //     ]
-    // },
+    optimization: {
+        splitChunks: {
+            minSize: 0,
+            cacheGroups: {
+                commons: {
+                    name: 'commons',
+                    chunks: 'initial',
+                    minChunks: 2
+                },
+            }
+        },
+        minimizer: [
+            new TerserPlugin({
+                parallel: true,
+                cache: true
+            })
+        ]
+    },
     stats: 'normal'// "none" | "errors-only" | "minimal" | "normal" | "detailed" | "verbose" | "errors-warnings"
 });
 

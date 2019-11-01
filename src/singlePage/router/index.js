@@ -22,17 +22,29 @@ export default new VueRouter({
     {
       path: "/",
       name: "PageA",
-      component: compoA
+      component: compoA,
+      meta: {
+        deepth: 0.5,
+        keepAlive: false
+      }
     },
     {
       path: "/pageB",
       name: "PageB",
-      component: compoB
+      component: compoB,
+      meta: {
+        deepth: 1,
+        keepAlive: true
+      }
     },
     {
       path: "/pageC",
       name: "PageC",
-      component: compoC
+      component: compoC,
+      meta: {
+        deepth: 1,
+        keepAlive: false
+      }
     }
   ]
 });

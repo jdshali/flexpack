@@ -30,7 +30,7 @@ const getMpaSet = () => {
     const entry = {};
     const htmlWebpackPlugins = [];
 
-    const entryFiles = glob.sync(path.join(__dirname, '../src/*/index.js'));
+    const entryFiles = glob.sync(path.join(__dirname, '../src/*/index.ts'));
     /*
         [ 
             'D:/code/mycode/webpack/jk-webpack/src/index/index.js',
@@ -42,7 +42,7 @@ const getMpaSet = () => {
         .map((index) => {
             const entryFile = entryFiles[index];
 
-            const match = entryFile.match(/src\/(.*)\/index.js/);
+            const match = entryFile.match(/src\/(.*)\/index.ts/);
             const pagename = match && match[1];
 
             entry[pagename] = entryFile;
@@ -90,6 +90,11 @@ module.exports = {
                 options: {
                     fix: true,
                 },
+            },
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/
             },
             // {
             //     test: /\.js$/,
@@ -280,7 +285,7 @@ module.exports = {
             'vue': path.resolve(__dirname, '../node_modules/vue/dist/vue.runtime.common.js'),
             'utils': path.resolve(__dirname, '../utils/')
         },
-        extensions: ['.js'],
+        extensions: ['.js','.tsx', '.ts']
         //mainFields: ['main']
     }
 }

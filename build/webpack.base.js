@@ -30,7 +30,7 @@ const getMpaSet = () => {
     const entry = {};
     const htmlWebpackPlugins = [];
 
-    const entryFiles = glob.sync(path.join(__dirname, '../src/*/index.ts'));
+    const entryFiles = glob.sync(path.join(__dirname, '../src/*/index.js'));
     /*
         [ 
             'D:/code/mycode/webpack/jk-webpack/src/index/index.js',
@@ -42,7 +42,7 @@ const getMpaSet = () => {
         .map((index) => {
             const entryFile = entryFiles[index];
 
-            const match = entryFile.match(/src\/(.*)\/index.ts/);
+            const match = entryFile.match(/src\/(.*)\/index.js/);
             const pagename = match && match[1];
 
             entry[pagename] = entryFile;

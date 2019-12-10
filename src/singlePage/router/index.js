@@ -11,13 +11,14 @@ const compoB = () =>
 const compoC = () =>
   import(/* webpackChunkName: "compoC" */ "../components/compoC.vue");
 
+const compoD = import("../components/compoD.vue");
+
 // console.log("compoC", compoC);
 
 // import("../components/compoC.vue").then(Text => {
 //   console.log(Text);
 // });
-
-export default new VueRouter({
+const router = new VueRouter({
   routes: [
     {
       path: "/",
@@ -26,6 +27,11 @@ export default new VueRouter({
       meta: {
         deepth: 0.5,
         keepAlive: false
+      },
+      beforeEnter: (to, from, next) => {
+        // 路由独享的守卫
+        console.info("路由独享的守卫:beforeEnter", to, from);
+        next();
       }
     },
     {
@@ -45,6 +51,34 @@ export default new VueRouter({
         deepth: 1,
         keepAlive: false
       }
+    },
+    {
+      path: "/pageD",
+      name: "PageD",
+      component: compoD,
+      meta: {
+        deepth: 1,
+        keepAlive: false
+      }
     }
   ]
 });
+
+router.beforeEach((to, from, next) => {
+  // 全局前置守卫
+  console.info("全局前置守卫:beforeEach", to, from);
+  next();
+});
+
+router.beforeResolve((to, from, next) => {
+  // 解析守卫
+  console.info("解析守卫:beforeEach", to, from);
+  next();
+});
+
+router.afterEach((to, from) => {
+  // 全局后置钩子
+  console.info("全局后置钩子:afterEach", to, from);
+});
+
+export default router;

@@ -8,7 +8,9 @@
     "lint": "eslint src/**/*.js --fix",
     "dev": "webpack-dev-server --config ./build/webpack.dev.js --open",
     "prod": "webpack --config ./build/webpack.prod.js",
-    "dll": "webpack --config ./build/webpack.dll.js"
+    "dll": "webpack --config ./build/webpack.dll.js",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "husky": {
     "hooks": {
@@ -28,7 +30,7 @@
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
-    "core-js": "^3.3.5",
+    "core-js": "^3.4.0",
     "css-loader": "^3.2.0",
     "eslint": "^5.16.0",
     "eslint-config-alloy": "^3.0.0",

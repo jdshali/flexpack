@@ -4,27 +4,12 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack'); 
 const SpeedMeasureWebpackPlugin = require('speed-measure-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const smp = new SpeedMeasureWebpackPlugin();
+// const smp = new SpeedMeasureWebpackPlugin();
 
 
 
-module.exports =  smp.wrap(merge(baseConfig, {
+module.exports =  merge(baseConfig, { //smp.wrap(
     mode: "production",
-    modules:{
-        rules:[
-            {
-                test: /\.(js)$/,
-                exclude: /(node_modules)/,
-                use:{
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/preset-env'],
-                        plugins: ['@babel/transform-runtime']
-                    }
-                }
-            }
-        ]
-    },
     plugins: [
         new CleanWebpackPlugin(),//清除目录
         new webpack.optimize.ModuleConcatenationPlugin(),//Scope hoisting 作用域提升 
@@ -35,9 +20,9 @@ module.exports =  smp.wrap(merge(baseConfig, {
             cacheGroups: {
                 commons: {
                     name: 'commons',
-                    chunks: 'all',
-                    minChunks: 1
-                }
+                    chunks: 'initial',
+                    minChunks: 2
+                },
             }
         },
         minimizer: [
@@ -48,6 +33,6 @@ module.exports =  smp.wrap(merge(baseConfig, {
         ]
     },
     stats: 'normal'// "none" | "errors-only" | "minimal" | "normal" | "detailed" | "verbose" | "errors-warnings"
-}));
+});
 
 

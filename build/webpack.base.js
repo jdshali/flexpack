@@ -77,7 +77,8 @@ module.exports = {
     entry: entry,
     output: {
         path: path.resolve(__dirname, '../dist'),
-        filename: '[name]_[chunkhash].js'
+        filename: '[name]_[chunkhash].js',
+        //publicPath: path.resolve(__dirname, '../dist')
     },
     module: {
         rules: [
@@ -90,6 +91,11 @@ module.exports = {
                     fix: true,
                 },
             },
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/
+            },
             // {
             //     test: /\.js$/,
             //     exclude: /(node_modules|bower_components)/,
@@ -97,16 +103,21 @@ module.exports = {
             //    // use: ['happypack/loader?id=babel'],
             //     exclude: /node_modules/
             // },
+            // {
+            //     test: /\.(js)$/,
+            //     exclude: /(node_modules)/,
+            //     use:{
+            //         loader: 'babel-loader',
+            //         options: {
+            //             presets: ['@babel/preset-env'],
+            //             plugins: ["@babel/plugin-syntax-dynamic-import"]
+            //         }
+            //     }
+            // },
             {
-                test: /\.(js)$/,
-                exclude: /(node_modules)/,
-                use:{
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/preset-env'],
-                        plugins: ["@babel/plugin-syntax-dynamic-import"]
-                    }
-                }
+                test: /\.js$/,
+                exclude: /(node_modules|bower_components)/,
+                use: 'babel-loader'
             },
             {
                 test: /\.vue$/,
@@ -264,9 +275,9 @@ module.exports = {
             manifest: require('../build/library/library.json')
         }),
         //new HardSourceWebpackPlugin(),
-        new PurgecssPlugin({
-            paths: glob.sync(`${PATHS.src}/**/*`,  { nodir: true }),
-        })
+        // new PurgecssPlugin({
+        //     paths: glob.sync(`${PATHS.src}/**/*`,  { nodir: true }),
+        // })
         
     ].concat(htmlWebpackPlugins),
     resolve: {
@@ -274,7 +285,7 @@ module.exports = {
             'vue': path.resolve(__dirname, '../node_modules/vue/dist/vue.runtime.common.js'),
             'utils': path.resolve(__dirname, '../utils/')
         },
-        extensions: ['.js'],
+        extensions: ['.js','.tsx', '.ts']
         //mainFields: ['main']
     }
 }

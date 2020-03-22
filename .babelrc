@@ -5,6 +5,7 @@
         //     "eventModifiers": false
         // }]
     ],
-    "plugins": ["@babel/plugin-syntax-dynamic-import"]
+    //"plugins": ["@babel/plugin-syntax-dynamic-import", "dynamic-import-node",]
+    "plugins": [ "@babel/plugin-syntax-dynamic-import"]
 
 }
